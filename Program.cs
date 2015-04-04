@@ -312,7 +312,7 @@ namespace ghs_demangle
                             int loc = int.Parse(name.Substring(start + 1, end - start - 1), CultureInfo.InvariantCulture);
 
                             string tmp;
-                            int len = ReadInt(name.Substring(loc), out tmp);
+                            int len = ReadInt(result.Substring(loc), out tmp);
 
                             if (len == 0 || len > tmp.Length)
                                 throw new InvalidDataException("Bad string length \"" + len.ToString(CultureInfo.InvariantCulture) + "\".");
