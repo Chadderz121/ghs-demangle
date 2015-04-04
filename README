@@ -1,0 +1,21 @@
+ghs-demangle
+ by Alex Chadwick
+
+A name demangler for the ghs compiler used on Wii U.
+
+This is free software; see LICENSE for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+ghs-demangle takes in mangled C++ symbol names from an input file one line
+at a time, demangles them, and outputs them to standard output. It can also
+read its input from standard input, making it suitable for piping on Unix.
+Any formatting errors will be reported on standard error. Erroring lines
+are copied unaltered to the output.
+
+The specification for the name mangling scheme was entirely guessed from
+looking at output symbols, so this program may be inaccurate. The scheme
+seems somewhat similar to a common one seen in a few compilers which
+appears to have gone out of fashion. In particular, the GCC 2.9.x scheme
+closely resembles the ghs one.
+
+Contributions are more than welcome as new elements are encountered!
