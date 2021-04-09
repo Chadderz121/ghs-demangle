@@ -20,6 +20,10 @@ namespace ghs_demangle
             baseNames.Add("__vtbl", " virtual table");
             baseNames.Add("__ct", "#");
             baseNames.Add("__dt", "~#");
+            baseNames.Add("__nw", "operator new");
+            baseNames.Add("__dl", "operator delete");
+            baseNames.Add("__nwa", "operator new[]");
+            baseNames.Add("__dla", "operator delete[]");
             baseNames.Add("__as", "operator=");
             baseNames.Add("__eq", "operator==");
             baseNames.Add("__ne", "operator!=");
@@ -35,12 +39,11 @@ namespace ghs_demangle
             baseNames.Add("__ml", "operator*");
             baseNames.Add("__amu", "operator*=");
             baseNames.Add("__dv", "operator/");
+            baseNames.Add("__cl", "operator()");
+            baseNames.Add("__rs", "operator>>");
+            baseNames.Add("__vc", "operator[]");
             /* XXX below baseNames have not been seen - guess from libiberty cplus-dem.c */
             baseNames.Add("__adv", "operator/=");
-            baseNames.Add("__nw", "operator new");
-            baseNames.Add("__dl", "operator delete");
-            baseNames.Add("__vn", "operator new[]");
-            baseNames.Add("__vd", "operator delete[]");
             baseNames.Add("__md", "operator%");
             baseNames.Add("__amd", "operator%=");
             baseNames.Add("__mm", "operator--");
@@ -53,13 +56,10 @@ namespace ghs_demangle
             baseNames.Add("__ad", "operator&");
             baseNames.Add("__aad", "operator&=");
             baseNames.Add("__co", "operator~");
-            baseNames.Add("__cl", "operator()");
             baseNames.Add("__ls", "operator<<");
             baseNames.Add("__als", "operator<<=");
-            baseNames.Add("__rs", "operator>>");
             baseNames.Add("__ars", "operator>>=");
             baseNames.Add("__rf", "operator->");
-            baseNames.Add("__vc", "operator[]");
             baseTypes = new Dictionary<char,string>();
             baseTypes.Add('v', "void");
             baseTypes.Add('i', "int");
