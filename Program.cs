@@ -183,6 +183,10 @@ namespace ghs_demangle
         /* e.g. "h__Fi" => "h(int)" */
         static string Demangle(string name)
         {
+            if (name.Contains("__ghs_thunk__")) {
+                name = name.Substring(25);
+            }
+
             name = Decompress(name);
 
             /* This demangle method has basically turned into a hand-written
@@ -295,7 +299,13 @@ namespace ghs_demangle
 
                     int end = name.IndexOf('J', start + 1);
 
-                    if (end != -1)
+                    /* if two Js are right next to each other, then just append one J and move forward 2 characters. */
+                    if (end == start + 1)
+                    {
+                        result += "J";
+                        index = start + 2;
+                    }
+                    else if (end != -1)
                     {
                         bool valid = true;
 
@@ -457,7 +467,7 @@ namespace ghs_demangle
                 if (args.Count > 0)
                     result += ", ";
 
-                string type, val;
+                string type, val = "";
 
                 if (remainder.StartsWith("X", StringComparison.Ordinal))
                 {
@@ -476,7 +486,7 @@ namespace ghs_demangle
                     else
                     {
                         /* <type><encoding> */
-                        type = ReadType(args, remainder, out remainder).Replace("#", " #");
+                        type = ReadType(args, remainder, out remainder);
 
                         if (remainder.StartsWith("L", StringComparison.Ordinal))
                         {
@@ -494,12 +504,16 @@ namespace ghs_demangle
                             if (!remainder.StartsWith("_"))
                                 throw new InvalidDataException("Unexpected character after template parameter length \"" + remainder[0] + "\". Expected \"_\".");
 
+                            type = type.Replace("#", " #");
                             remainder = remainder.Substring(1);
                             val = remainder.Substring(0, len);
                             remainder = remainder.Substring(len);
                         }
                         else
-                            throw new InvalidDataException("Unknown template parameter encoding: \"" + remainder[0] + "\".");
+                        {
+                            val = type.Replace("#", "");
+                            type = "class #";
+                        }
                     }
                 }
                 else
@@ -696,6 +710,16 @@ namespace ghs_demangle
             int len = ReadInt(name, out name);
             if (len == 0 || name.Length < len)
                 throw new InvalidDataException("Bad string length \"" + len.ToString(CultureInfo.InvariantCulture) + "\".");
+
+            /* if the mangled string starts with __N_, and the number following is equal to the length of the string -9, then it refers to an anonymous namespace.*/
+            if (name.Length > 4)
+            {
+                if (name.Substring(0, 4) == "__N_")
+                {
+                    remainder = name.Substring(len);
+                    return "<anonymous>";
+                }
+            }
 
             remainder = name.Substring(len);
             return DemangleTemplate(name.Substring(0, len));
